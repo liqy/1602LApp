@@ -12,7 +12,6 @@ import android.view.View;
 /**
  * @file FileName
  * 1602LApp
- *  * liqy
  * Copyright 星期五 YourCompany.
  */
 public class PathView extends View {

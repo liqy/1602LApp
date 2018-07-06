@@ -12,7 +12,11 @@
         <!--app:MyText="自定义"-->
         <!--app:MyTextColor="#00FF00" />-->
 
-    <view.PathView
+    <!--<view.PathView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+
+    <view.CircleView
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

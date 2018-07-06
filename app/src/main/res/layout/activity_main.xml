@@ -16,7 +16,12 @@
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent" />-->
 
-    <view.CircleView
+    <!--<view.CircleView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+
+    <view.BitmapAndTextView
+        android:id="@+id/myview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

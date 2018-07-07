@@ -15,9 +15,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.liqy.zhoukao1.MainActivity;
 import com.liqy.zhoukao1.R;
-import com.liqy.zhoukao1.SplashActivity;
 
 /**
  * 自定义倒计时控件
@@ -36,6 +34,7 @@ public class CountDownView extends View {
 
 
     MyListener listener;
+    Handler handler;
 
     public CountDownView(Context context) {
         super(context);
@@ -105,28 +104,30 @@ public class CountDownView extends View {
         paint.setColor(textColor);
         paint.setTextSize(18);
         paint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText(""+time,cx,cy,paint);
+        canvas.drawText("" + time, cx, cy, paint);
 
     }
 
     /**
      * 设置倒计时时间
+     *
      * @param time
      */
-    public void setTime(int time){
-        this.time=time;
+    public void setTime(int time) {
+        this.time = time;
         //TODO 刷新页面
         invalidate();
     }
 
     /**
      * 启动倒计时
+     *
      * @param cur
      * @param next
      */
-    public void start(final Activity cur, final Class<?>  next){
+    public void start(final Activity cur, final Class<?> next) {
         //定义Handler
-        Handler handler = new Handler() {
+        handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -144,15 +145,25 @@ public class CountDownView extends View {
             }
         };
 
+
         //开始倒计时
         handler.sendEmptyMessageDelayed(1, 1000);
 
     }
 
+    /**
+     * 停止倒计时
+     */
+    public void stop() {
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction()==MotionEvent.ACTION_DOWN){
-            if (listener!=null){
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (listener != null) {
                 listener.onClick(this);
             }
         }
@@ -164,7 +175,7 @@ public class CountDownView extends View {
     }
 
     //    设置点击事件
-    public interface MyListener{
+    public interface MyListener {
         void onClick(View view);
     }
 

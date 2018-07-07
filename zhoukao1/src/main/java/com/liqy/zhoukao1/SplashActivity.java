@@ -25,6 +25,10 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //TODO 跳转
+                downText.stop();//停止倒计时
+                Intent intent=new Intent(SplashActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 

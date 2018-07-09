@@ -7,62 +7,88 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * 自定义控件  流式布局
+ * 使用场景   电商搜索记录
+ *          电商点评分类标签
+ *          分类标签
+ */
 public class FlowLayout extends ViewGroup
 {
 
+    /**
+     * 构造方法
+     * @param context
+     * @param attrs
+     * @param defStyle
+     */
     public FlowLayout(Context context, AttributeSet attrs, int defStyle)
     {
         super(context, attrs, defStyle);
     }
 
+    /**
+     * 构造方法
+     * @param context
+     * @param attrs
+     */
     public FlowLayout(Context context, AttributeSet attrs)
     {
         this(context, attrs, 0);
     }
 
+    /**
+     * 构造方法
+     * @param context
+     */
     public FlowLayout(Context context)
     {
         this(context, null);
     }
 
+    /**
+     * 测量
+     * @param widthMeasureSpec
+     * @param heightMeasureSpec
+     */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
         // 获得它的父容器为它设置的测量模式和大小
-        int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
-        int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
+        int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);//测量大小
+        int modeWidth = MeasureSpec.getMode(widthMeasureSpec);//测量模式
+
+
         int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
         int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
 
-        // 用于warp_content情况下，来记录父view宽和高
+        // 用于warp_content情况下，来记录父view宽和高（自适应）
         int width = 0;
         int height = 0;
 
-        // 取每一行宽度的最大值
-        int lineWidth = 0;
-        // 每一行的高度累加
-        int lineHeight = 0;
+        int lineWidth = 0;// 取每一行宽度的最大值
+        int lineHeight = 0;// 每一行的高度累加
 
-        // 获得子view的个数
-        int cCount = getChildCount();
+        int cCount = getChildCount();// 获得子view的个数
 
         for (int i = 0; i < cCount; i++)
         {
             View child = getChildAt(i);//获取子视图
 
-            // 测量子View的宽和高（子view在布局文件中是wrap_content）
+            // 测量子View的宽和高（子view在布局文件中是wrap_content）必须
             measureChild(child, widthMeasureSpec, heightMeasureSpec);
 
-            // 得到LayoutParams
+            // 得到LayoutParams 获取间距Margin
             MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
 
-            // 根据测量宽度加上Margin值算出子view的实际宽度（上文中有说明）
+            // 根据测量宽度加上Margin值算出子view的实际宽度（上文中有说明） （本身大小+左右间距）
             int childWidth = child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin;
-            // 根据测量高度加上Margin值算出子view的实际高度
+
+            // 根据测量高度加上Margin值算出子view的实际高度（本身高度+上下间距）
             int childHeight = child.getMeasuredHeight() + lp.topMargin+ lp.bottomMargin;
 
             // 这里的父view是有padding值的，如果再添加一个元素就超出最大宽度就换行
-            if (lineWidth + childWidth > sizeWidth - getPaddingLeft() - getPaddingRight())
+            if ((lineWidth + childWidth)> (sizeWidth - getPaddingLeft() - getPaddingRight()))//超过
             {
                 // 父view宽度=以前父view宽度、当前行宽的最大值
                 width = Math.max(width, lineWidth);

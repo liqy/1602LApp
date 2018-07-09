@@ -1,5 +1,6 @@
 package com.liqy.l602lapp;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ public class FlowActivity extends AppCompatActivity {
             final RelativeLayout rl2 = (RelativeLayout) mInflater.inflate(R.layout.flow_layout, flowLayout, false);
             TextView tv2 = (TextView) rl2.findViewById(R.id.tv);
             tv2.setText(mVals[i]);
+            tv2.setTextColor(Color.BLACK);
             rl2.setTag(i);
             flowLayout.addView(rl2);
             rl2.setOnClickListener(new View.OnClickListener() {

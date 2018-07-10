@@ -132,27 +132,39 @@ public class FlowLayout extends ViewGroup
     //存储每一行的高度
     private List<Integer> mLineHeight = new ArrayList<Integer>();
 
+    /**
+     * 布局
+     * @param changed
+     * @param l
+     * @param t
+     * @param r
+     * @param b
+     */
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b)
     {
+        //清除控件，重新布局
         mAllViews.clear();
         mLineHeight.clear();
 
-        // 当前ViewGroup的宽度
-        int width = getWidth();
+        int width = getWidth();        // 当前ViewGroup的宽度
 
         int lineWidth = 0;
         int lineHeight = 0;
+
         // 存储每一行所有的childView
         List<View> lineViews = new ArrayList<View>();
 
-        int cCount = getChildCount();
+        int cCount = getChildCount();//获取子视图的个数
 
         for (int i = 0; i < cCount; i++)
         {
-            View child = getChildAt(i);
+            View child = getChildAt(i);//获取子视图
+
+            //获取外间距
             MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
 
+            //子视图宽高
             int childWidth = child.getMeasuredWidth();
             int childHeight = child.getMeasuredHeight();
 
@@ -174,7 +186,7 @@ public class FlowLayout extends ViewGroup
                 //不管换不换行都要处理当前子view
                 lineWidth += childWidth + lp.leftMargin + lp.rightMargin;
                 lineHeight = Math.max(lineHeight, childHeight + lp.topMargin+ lp.bottomMargin);
-                lineViews.add(child);//布局完成，将控件添加到ViewGroup
+                lineViews.add(child);
 
 
         }
@@ -183,7 +195,6 @@ public class FlowLayout extends ViewGroup
         mAllViews.add(lineViews);
 
         // 设置子View的位置
-
         int left = getPaddingLeft();
         int top = getPaddingTop();
 
@@ -215,6 +226,7 @@ public class FlowLayout extends ViewGroup
                 // 为子View进行布局
                 child.layout(lc, tc, rc, bc);
 
+                //移动坐标
                 left += child.getMeasuredWidth() + lp.leftMargin+ lp.rightMargin;
             }
             left = getPaddingLeft() ;

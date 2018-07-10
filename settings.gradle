@@ -1,1 +1,1 @@
-include ':app', ':zhoukao1'
+include ':app', ':zhoukao1', ':meituan', ':volley'

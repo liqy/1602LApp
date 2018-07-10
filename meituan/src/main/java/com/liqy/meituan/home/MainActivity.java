@@ -11,29 +11,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.liqy.meituan.R;
+import com.liqy.meituan.network.VolleySingleton;
 
 public class MainActivity extends AppCompatActivity {
 
     TabLayout tabLayout;
     ViewPager viewPager;
 
-    private static final String TAG="Search";
+    private static final String TAG = "Search";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tabLayout=(TabLayout)findViewById(R.id.tabLayout);
-        viewPager=(ViewPager)findViewById(R.id.vp);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        viewPager = (ViewPager) findViewById(R.id.vp);
 
-        MyViewPagerAdapter adapter=new MyViewPagerAdapter(getSupportFragmentManager());
+        MyViewPagerAdapter adapter = new MyViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);//关联
         tabLayout.setupWithViewPager(viewPager);//关联
 
@@ -41,20 +40,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void get(){
-        //创建请求队列(重复)
-        RequestQueue queue = Volley.newRequestQueue(this);
+    public void get() {
 
         //拼接URL
-        String url="http://39.108.3.12:3000/v1/search/restaurant?keyword=%E9%BA%A6%E5%BD%93";
+        String url = "http://39.108.3.12:3000/v1/search/restaurant?keyword=%E9%BA%A6%E5%BD%93";
 
         //组装请求
         //请求方法，URL，正确响应，错误响应
-        StringRequest request=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
-                Log.i(getLocalClassName(),response);
+                Log.i(getLocalClassName(), response);
 
             }
         }, new Response.ErrorListener() {
@@ -63,15 +60,15 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
         request.setTag(TAG);
-        queue.add(request);
+        //添加到队列执行请求
+        VolleySingleton.getInstance2().addToRequestQueue(request);
     }
 
-    class  MyViewPagerAdapter extends FragmentPagerAdapter{
+    class MyViewPagerAdapter extends FragmentPagerAdapter {
 
         private final String[] title = new String[]{
-                "推荐", "热点", "视频", };
+                "推荐", "热点", "视频",};
 
         public MyViewPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -79,15 +76,15 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            if (position==0){
+            if (position == 0) {
                 //TODO
             }
 
-            if (position==1){
+            if (position == 1) {
                 //TODO
             }
 
-            return HomeFragment.newInstance(title[position],"");
+            return HomeFragment.newInstance(title[position], "");
         }
 
         @Override

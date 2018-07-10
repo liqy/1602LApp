@@ -1,17 +1,115 @@
 package com.liqy.meituan.search;
 
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.liqy.meituan.BaseActivity;
 import com.liqy.meituan.R;
+import com.liqy.meituan.network.VolleySingleton;
+import com.liqy.meituan.view.TitleBar;
 
-public class SearchActivity extends AppCompatActivity {
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
+public class SearchActivity extends BaseActivity {
+
+    private static final String TAG = "Search";
+
+
+    Button button;
+    EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
+        initView();
     }
+
+    @Override
+    protected void initView() {
+        bar=(TitleBar)findViewById(R.id.search_title);
+
+        button=(Button)findViewById(R.id.btn_search);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        editText=(EditText)findViewById(R.id.edit_search);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.d("EditText",s.toString());
+                String keyword=s.toString();
+                if (!TextUtils.isEmpty(keyword)){
+
+                    get(s.toString());
+                }
+            }
+        });
+
+        bar.setBarListener(new TitleBar.BarListener() {
+            @Override
+            public void back() {
+                finish();
+            }
+        });
+    }
+
+    /**
+     * 利用关键字搜索网络数据
+     * @param keyword
+     */
+    public void get(String keyword) {
+
+        //取消上次请求
+        VolleySingleton.getInstance2().cancelReq(TAG);
+
+        //拼接URL
+        String url = "http://39.108.3.12:3000/v1/search/restaurant?keyword="+URLEncoder.encode(keyword);
+
+        //组装请求
+        //请求方法，URL，正确响应，错误响应
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                Log.i(getLocalClassName(), response);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        request.setTag(TAG);
+        //添加到队列执行请求
+        VolleySingleton.getInstance2().addToRequestQueue(request);
+    }
+
 }

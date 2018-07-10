@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
 
-    private static final String TAG = "Search";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,34 +35,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);//关联
         tabLayout.setupWithViewPager(viewPager);//关联
 
-        get();
-
     }
 
-    public void get() {
 
-        //拼接URL
-        String url = "http://39.108.3.12:3000/v1/search/restaurant?keyword=%E9%BA%A6%E5%BD%93";
-
-        //组装请求
-        //请求方法，URL，正确响应，错误响应
-        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                Log.i(getLocalClassName(), response);
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        request.setTag(TAG);
-        //添加到队列执行请求
-        VolleySingleton.getInstance2().addToRequestQueue(request);
-    }
 
     class MyViewPagerAdapter extends FragmentPagerAdapter {
 

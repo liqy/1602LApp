@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -17,17 +18,31 @@ import com.liqy.meituan.BaseActivity;
 import com.liqy.meituan.R;
 import com.liqy.meituan.network.VolleySingleton;
 import com.liqy.meituan.view.TitleBar;
+import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SearchActivity extends BaseActivity {
 
+    //请求TAG 取消网络请求时的标记
     private static final String TAG = "Search";
 
+    Button button; //搜素按钮
+    EditText editText; //编辑框
 
-    Button button;
-    EditText editText;
+    TagFlowLayout flowLayout;//流式布局
+    KeyAdapter keyAdapter;//标签适配器
+
+    //历史标签
+    private String[] mVals = new String[]
+            {"Hello", "Android", "Weclome Hi ", "Button", "TextView", "Hello",
+                    "Android", "Weclome", "Button ImageView", "TextView", "Helloworld",
+                    "Android", "Weclome Hello", "Button Text", "TextView"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +51,9 @@ public class SearchActivity extends BaseActivity {
         initView();
     }
 
+    /**
+     * 初始化视图
+     */
     @Override
     protected void initView() {
         bar=(TitleBar)findViewById(R.id.search_title);
@@ -50,6 +68,7 @@ public class SearchActivity extends BaseActivity {
         });
 
         editText=(EditText)findViewById(R.id.edit_search);
+        //监听输入文字变化
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -66,15 +85,34 @@ public class SearchActivity extends BaseActivity {
                 String keyword=s.toString();
                 if (!TextUtils.isEmpty(keyword)){
 
-                    get(s.toString());
+                    keyAdapter.addItem(keyword);//增加搜索记录
+
+                    get(s.toString());//请求数据
                 }
             }
         });
 
+        //返回按钮监听
         bar.setBarListener(new TitleBar.BarListener() {
             @Override
             public void back() {
                 finish();
+            }
+        });
+
+        flowLayout=(TagFlowLayout)findViewById(R.id.id_flowlayout);
+
+        //设置数据 https://github.com/hongyangAndroid/FlowLayout
+
+        //初始化适配器
+        keyAdapter=new KeyAdapter(this, new ArrayList<String>(Arrays.asList(mVals)));
+        flowLayout.setAdapter(keyAdapter);
+
+        //设置监听方法
+        flowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                return false;
             }
         });
     }
@@ -108,6 +146,7 @@ public class SearchActivity extends BaseActivity {
         });
 
         request.setTag(TAG);
+
         //添加到队列执行请求
         VolleySingleton.getInstance2().addToRequestQueue(request);
     }

@@ -7,8 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * @file FileName
- * 1602LApp
- *  * liqy
+ * 数据存储自己实现
  * Copyright 星期二 YourCompany.
  */
 public class DBHelper extends SQLiteOpenHelper{
